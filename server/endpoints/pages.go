@@ -18,3 +18,11 @@ func GetPageNodesBySectionId(c *gin.Context, client *mongo.Client, ctx context.C
 		c.IndentedJSON(http.StatusOK, eps)
 	}
 }
+func GetPageByEpisode(c *gin.Context, client *mongo.Client, ctx context.Context, pageId string, episodeNum int) {
+	pageNodes, err := mongoUtils.GetPageByEpisode(client, ctx, pageId, episodeNum)
+	if err != nil {
+		c.IndentedJSON(http.StatusNotFound, err.Error())
+	} else {
+		c.IndentedJSON(http.StatusOK, pageNodes)
+	}
+}

@@ -2,9 +2,13 @@ package main
 
 import (
 	"context"
+	"strconv"
+
 	// "fmt"
 	"log"
+	"net/http"
 
+	// "popit/models"
 	"popit/endpoints"
 	"popit/mongoUtils"
 
@@ -39,6 +43,15 @@ func main() {
 
 	router.GET("/pages/nodes/:sectionId", func(c *gin.Context) {
 		endpoints.GetPageNodesBySectionId(c, client, ctx, c.Param("sectionId"))
+	})
+
+	router.GET("/pages/page/:pageId/:episodeNum", func(c *gin.Context) {
+		episodeNum, err := strconv.Atoi(c.Param("episodeNum"))
+		if err != nil {
+			c.IndentedJSON(http.StatusNotFound, err.Error())
+		} else {
+			endpoints.GetPageByEpisode(c, client, ctx, c.Param("pageId"), episodeNum)
+		}
 	})
 
 	// show := Show{
@@ -90,20 +103,20 @@ func main() {
 	// 	InitialEpisodeNum: 1,
 	// }
 
-	// nodes := []PageNode {
+	// nodes := []models.PageNode {
 	// 	{
 	// 		SectionID: uuid.New().String(),
 	// 		EpisodeNum: 1,
-	// 		Type: HEADER,
+	// 		Type: models.HEADER,
 	// 		Title: "Eren Yeager",
-	// 		Content: PageNodeContent {
-	// 			ProfileImages: []Pair {
+	// 		Content: models.PageNodeContent {
+	// 			ProfileImages: []models.Pair {
 	// 				{
 	// 					Key: "Young Eren",
 	// 					Value: "test_img",
 	// 				},
 	// 			},
-	// 			ProfileAttributes: []Pair {
+	// 			ProfileAttributes: []models.Pair {
 	// 				{
 	// 					Key: "Gender",
 	// 					Value: "Male",
@@ -123,31 +136,64 @@ func main() {
 	// 	{
 	// 		SectionID: uuid.New().String(),
 	// 		EpisodeNum: 1,
-	// 		Type: SUMMARY,
+	// 		Type: models.SUMMARY,
 	// 		Title: "Appearance",
-	// 		Content: PageNodeContent {
+	// 		Content: models.PageNodeContent {
 	// 			Text: "He's short with short, black hair and green eyes.",
 	// 		},
 	// 	},
 	// 	{
 	// 		SectionID: uuid.New().String(),
 	// 		EpisodeNum: 1,
-	// 		Type: SUMMARY,
+	// 		Type: models.SUMMARY,
 	// 		Title: "Personality",
-	// 		Content: PageNodeContent {
+	// 		Content: models.PageNodeContent {
 	// 			Text: "He angry.",
 	// 		},
 	// 	},
 	// 	{
 	// 		SectionID: uuid.New().String(),
 	// 		EpisodeNum: 1,
-	// 		Type: SUMMARY,
+	// 		Type: models.SUMMARY,
 	// 		Title: "Childhood",
-	// 		Content: PageNodeContent {
+	// 		Content: models.PageNodeContent {
 	// 			Text: "A titan ate his mom lol.",
 	// 		},
 	// 	},
 	// }
+
+	// epUpNode := models.PageNode {
+	// 	SectionID: "2804effd-812e-4767-a077-bbfbe2241f9a",
+	// 	EpisodeNum: 2,
+	// 	ShowId: "625798abc15bd223b8a9eeae",
+	// 	Type: models.SUMMARY,
+	// 	Title: "Personality",
+	// 	Content: models.PageNodeContent {
+	// 		Text: "He angry and wants to kill all the titans.",
+	// 	},
+	// }
+
+	// newSecNode := models.PageNode {
+	// 	SectionID: uuid.New().String(),
+	// 	EpisodeNum: 2,
+	// 	Type: models.SUMMARY,
+	// 	Title: "Training",
+	// 	Content: models.PageNodeContent {
+	// 		Text: "After titans destroyed his hometown, he teamed up with his two friends and joined the 104th Cadet Corps to begin his training.",
+	// 	},
+	// }
+
+	// err = mongoUtils.InsertPageNode(client, ctx, "6258eb587e88309ada6c2091", newSecNode, 4)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+
+	// err = mongoUtils.AddPageNodeForNewEpisode(client, ctx, epUpNode)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+
+	mongoUtils.RevalidatePageSections(client, ctx, "6258eb587e88309ada6c2091")
 
 	// id, err := addPage(client, ctx, page, nodes)
 	// if err != nil {

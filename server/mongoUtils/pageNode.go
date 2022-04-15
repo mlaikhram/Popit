@@ -28,10 +28,29 @@ func addPageNodes(client *mongo.Client, ctx context.Context, showId string, node
 	return nil
 }
 
+func AddPageNodeForNewEpisode(client *mongo.Client, ctx context.Context, node models.PageNode) error {
+	pageNodes, err := GetPageNodesBySectionId(client, ctx, node.SectionID)
+	if err != nil {
+		return err
+	} else if len(pageNodes) <= 0 {
+		return errors.New("error: Page node " + node.SectionID + " does not exist")
+	}
+	for i := range pageNodes {
+		if pageNodes[i].EpisodeNum == node.EpisodeNum {
+			return errors.New("error: Page node with this episode number already exists")
+		}
+	}
+	err = addPageNodes(client, ctx, node.ShowId, []models.PageNode{node})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func InsertPageNode(client *mongo.Client, ctx context.Context, pageId string, node models.PageNode, index int) error {
 	pagesCollection := client.Database("popit").Collection("pages")
 
-	pageArr, err := GetPageById(client, ctx, pageId)
+	pageArr, err := getPageById(client, ctx, pageId)
 	if err != nil {
 		return err
 	} else if len(pageArr) < 1 {
