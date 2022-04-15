@@ -1,52 +1,19 @@
 package main
 
 import (
-	"fmt"
 	"context"
+	// "fmt"
 	"log"
-	"net/http"
+
+	"popit/endpoints"
+	"popit/mongoUtils"
 
 	// "github.com/google/uuid"
-	"github.com/mlaikhram/popit/server/mongoUtils"
 	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
-
-func getShow(c *gin.Context, client *mongo.Client, ctx context.Context) {
-	log.Println("show param " + c.Param("showId"))
-	show, err := getShowById(client, ctx, c.Param("showId"))
-	if err != nil {
-		c.IndentedJSON(http.StatusNotFound, err.Error())
-	} else {
-		c.IndentedJSON(http.StatusOK, show)
-	}
-}
-
-func searchShow(c *gin.Context, client *mongo.Client, ctx context.Context) {
-	show, err := getShows(client, ctx, c.Param("term"))
-	if err != nil {
-		c.IndentedJSON(http.StatusNotFound, err.Error())
-	} else {
-		c.IndentedJSON(http.StatusOK, show)
-	}
-}
-
-func getEpisodesByShowId(c *gin.Context, client *mongo.Client, ctx context.Context) {
-	eps, err := getEpisodes(client, ctx, c.Param("showId"))
-	if err != nil {
-		c.IndentedJSON(http.StatusNotFound, err.Error())
-	} else {
-		c.IndentedJSON(http.StatusOK, eps)
-	}
-}
-
-func getPageNodesBySectionId(c *gin.Context, client *mongo.Client, ctx context.Context) {
-
-}
-
 func main() {
-	client, err := getClient()
+	client, err := mongoUtils.GetClient()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -59,15 +26,19 @@ func main() {
 
 	router := gin.Default()
 	router.GET("/shows/show/:showId", func(c *gin.Context) {
-		getShow(c, client, ctx)
+		endpoints.GetShowById(c, client, ctx, c.Param("showId"))
 	})
 
 	router.GET("/shows/search/:term", func(c *gin.Context) {
-		searchShow(c, client, ctx)
+		endpoints.GetShowByTitle(c, client, ctx, c.Param("term"))
 	})
 
 	router.GET("/shows/episodes/:showId", func(c *gin.Context) {
-		getEpisodesByShowId(c, client, ctx)
+		endpoints.GetEpisodesByShowId(c, client, ctx, c.Param("showId"))
+	})
+
+	router.GET("/pages/nodes/:sectionId", func(c *gin.Context) {
+		endpoints.GetPageNodesBySectionId(c, client, ctx, c.Param("sectionId"))
 	})
 
 	// show := Show{
@@ -190,20 +161,20 @@ func main() {
 	// }
 	// fmt.Println(pageArr[0])
 
-	shows, err := getShows(client, ctx, "shingeki no Kyojin")
-	// shows, err := getShows(client, ctx, "attack on titan")
+	// shows, err := mongoUtils.GetShows(client, ctx, "shingeki no Kyojin")
+	// // shows, err := getShows(client, ctx, "attack on titan")
 
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(shows)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// fmt.Println(shows)
 
-	episodes, err := getEpisodes(client, ctx, "625798abc15bd223b8a9eeae")
-	if err != nil {
-		log.Fatal(err)
-	}
+	// episodes, err := mongoUtils.GetEpisodesByShowId(client, ctx, "625798abc15bd223b8a9eeae")
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
-	fmt.Println(episodes)
+	// fmt.Println(episodes)
 
 	router.Run("localhost:8080")
 }

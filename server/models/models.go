@@ -1,4 +1,4 @@
-package main
+package models
 
 type Show struct {
 	ID      string   `json:"id,omitempty" bson:"_id,omitempty"`
