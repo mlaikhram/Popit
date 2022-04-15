@@ -6,6 +6,8 @@ import (
 	"log"
 	"net/http"
 
+	// "github.com/google/uuid"
+	"github.com/mlaikhram/popit/server/mongoUtils"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -37,6 +39,10 @@ func getEpisodesByShowId(c *gin.Context, client *mongo.Client, ctx context.Conte
 	} else {
 		c.IndentedJSON(http.StatusOK, eps)
 	}
+}
+
+func getPageNodesBySectionId(c *gin.Context, client *mongo.Client, ctx context.Context) {
+
 }
 
 func main() {
@@ -104,6 +110,85 @@ func main() {
 	// if err != nil {
 	// 	log.Fatal(err)
 	// }
+
+	// page := Page {
+	// 	ShowId: "625798abc15bd223b8a9eeae",
+	// 	Tags: map[int][]string {
+	// 		1: {"Characters"},
+	// 	},
+	// 	InitialEpisodeNum: 1,
+	// }
+
+	// nodes := []PageNode {
+	// 	{
+	// 		SectionID: uuid.New().String(),
+	// 		EpisodeNum: 1,
+	// 		Type: HEADER,
+	// 		Title: "Eren Yeager",
+	// 		Content: PageNodeContent {
+	// 			ProfileImages: []Pair {
+	// 				{
+	// 					Key: "Young Eren",
+	// 					Value: "test_img",
+	// 				},
+	// 			},
+	// 			ProfileAttributes: []Pair {
+	// 				{
+	// 					Key: "Gender",
+	// 					Value: "Male",
+	// 				},
+	// 				{
+	// 					Key: "Hometown",
+	// 					Value: "Shiganshina",
+	// 				},
+	// 				{
+	// 					Key: "Status",
+	// 					Value: "Alive",
+	// 				},
+	// 			},
+	// 			Text: "Eren Yeager is the main character. I don't feel like writing any more than that.",
+	// 		},
+	// 	},
+	// 	{
+	// 		SectionID: uuid.New().String(),
+	// 		EpisodeNum: 1,
+	// 		Type: SUMMARY,
+	// 		Title: "Appearance",
+	// 		Content: PageNodeContent {
+	// 			Text: "He's short with short, black hair and green eyes.",
+	// 		},
+	// 	},
+	// 	{
+	// 		SectionID: uuid.New().String(),
+	// 		EpisodeNum: 1,
+	// 		Type: SUMMARY,
+	// 		Title: "Personality",
+	// 		Content: PageNodeContent {
+	// 			Text: "He angry.",
+	// 		},
+	// 	},
+	// 	{
+	// 		SectionID: uuid.New().String(),
+	// 		EpisodeNum: 1,
+	// 		Type: SUMMARY,
+	// 		Title: "Childhood",
+	// 		Content: PageNodeContent {
+	// 			Text: "A titan ate his mom lol.",
+	// 		},
+	// 	},
+	// }
+
+	// id, err := addPage(client, ctx, page, nodes)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// fmt.Println("id: " + id)
+
+	// pageArr, err := getPageById(client, ctx, id)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// fmt.Println(pageArr[0])
 
 	shows, err := getShows(client, ctx, "shingeki no Kyojin")
 	// shows, err := getShows(client, ctx, "attack on titan")

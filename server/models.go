@@ -38,6 +38,7 @@ type PageNodeContent struct {
 
 type PageNode struct {
 	ID         string          `json:"id,omitempty" bson:"_id,omitempty"`
+	ShowId     string          `json:"showId,omitempty" bson:"showId"`
 	SectionID  string          `json:"sectionId,omitempty" bson:"sectionId,omitempty"`
 	EpisodeNum int             `json:"episodeNum,omitempty" bson:"episodeNum,omitempty"`
 	Type       PageNodeType    `json:"type" bson:"type"`
