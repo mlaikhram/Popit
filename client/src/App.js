@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, CardTitle, Col, Input, InputGroup, Row, UncontrolledCollapse } from "reactstrap"
+import { Button, Card, CardBody, CardTitle, Col, Input, InputGroup, Row, Spinner, UncontrolledCollapse } from "reactstrap"
 import { PageCard } from "./components/PageCard";
 import { PageScrollMenu } from "./components/PageScrollMenu";
 import { Link } from "react-router-dom";
@@ -228,7 +228,7 @@ function App() {
               <CardTitle>Find a show!</CardTitle>
               <InputGroup>
                 <Input />
-                <Button color="primary" id="search">Search!</Button>
+                <Button color="primary" id="search"><Spinner color="light" size="sm" />Search!</Button>
               </InputGroup>
             </CardBody>
           </Card>
@@ -238,29 +238,24 @@ function App() {
       <UncontrolledCollapse toggler="#search">
       <Row style={{marginTop: '2%'}}>
         <PageScrollMenu name="Results" items={items.map((show, index) => (
-          <PageCard itemId={"results_" + show.id} key={"results_" + show.id} src={show.images[1]} title={show.name} />
+          <PageCard itemId={"results_" + show.id} key={"results_" + show.id} src={show.images[1]} title={show.name} 
+          nav={"/show/" + show.id} />
         ))} />
       </Row>
       </UncontrolledCollapse>
       <Row style={{marginTop: '2%'}}>
         <PageScrollMenu name="Your Shows" items={items.map((show, index) => (
-          <PageCard itemId={"yours_" + show.id} key={"yours_" + show.id} src={show.images[1]} title={show.name} />
+          <PageCard itemId={"yours_" + show.id} key={"yours_" + show.id} src={show.images[1]} title={show.name}
+          nav={"/show/" + show.id} />
         ))} />
       </Row>
       <Row style={{marginTop: '2%'}}>
         <PageScrollMenu name="Browse" items={items.map((show, index) => (
-          <PageCard itemId={"browse_" + show.id} key={"browse_" + show.id} src={show.images[1]} title={show.name} />
+          <PageCard itemId={"browse_" + show.id} key={"browse_" + show.id} src={show.images[1]} title={show.name}
+          nav={"/show/" + show.id} />
         ))} />
       </Row>
-      {/* <nav
-        style={{
-          borderBottom: "solid 1px",
-          paddingBottom: "1rem",
-        }}
-      >
-        <Link to="/invoices">Invoices</Link> |{" "}
-        <Link to="/expenses">Expenses</Link>
-      </nav> */}
+      <Link to={"/show/" + items[0].id}>LINK</Link>
     </div>
   );
 }

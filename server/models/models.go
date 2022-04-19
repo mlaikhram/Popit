@@ -1,10 +1,11 @@
 package models
 
 type Show struct {
-	ID      string           `json:"id,omitempty" bson:"_id,omitempty"`
-	Name    string           `json:"name" bson:"name"`
-	Aliases []string         `json:"aliases" bson:"aliases,omitempty"`
-	Images  map[int]string `json:"images,omitempty" bson:"images,omitempty"`
+	ID       string         `json:"id,omitempty" bson:"_id,omitempty"`
+	Name     string         `json:"name" bson:"name"`
+	Aliases  []string       `json:"aliases" bson:"aliases,omitempty"`
+	Synopsis string         `json:"synopsis" bson:"synopsis"`
+	Images   map[int]string `json:"images,omitempty" bson:"images,omitempty"`
 }
 
 type Episode struct {

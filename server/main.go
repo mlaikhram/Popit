@@ -8,7 +8,7 @@ import (
 	"log"
 	"net/http"
 
-	"popit/models"
+	// "popit/models"
 	"popit/endpoints"
 	"popit/mongoUtils"
 
@@ -54,15 +54,16 @@ func main() {
 		}
 	})
 
-	show := models.Show{
-		Name: "Attack on Titan",
-		Aliases: []string{"Shingeki no Kyojin"},
-		Images: map[int]string{
-			1: "https://cdn.myanimelist.net/images/anime/5/44560l.jpg",
-		},
-	}
+	// show := models.Show{
+	// 	Name: "Attack on Titan",
+	// 	Aliases: []string{"Shingeki no Kyojin"},
+	// 	Synopsis: "Humanity struggles to fight back against the titans.",
+	// 	Images: map[int]string{
+	// 		1: "https://cdn.myanimelist.net/images/anime/5/44560l.jpg",
+	// 	},
+	// }
 
-	mongoUtils.EditShow(client, ctx, "625798abc15bd223b8a9eeae", show)
+	// mongoUtils.EditShow(client, ctx, "625798abc15bd223b8a9eeae", show)
 
 	// episode := Episode{
 	// 	Number: 1,
