@@ -2,6 +2,7 @@ package mongoUtils
 
 import (
 	"context"
+	"errors"
 
 	"popit/models"
 
@@ -67,4 +68,23 @@ func GetShowById(client *mongo.Client, ctx context.Context, showId string) ([]mo
 		return nil, err
 	}
 	return shows, nil
+}
+
+func EditShow(client *mongo.Client, ctx context.Context, showId string, show models.Show) error {
+	showsCollection := client.Database("popit").Collection("shows")
+
+	objId, err := primitive.ObjectIDFromHex(showId)
+	if err != nil {
+		return err
+	}
+
+	// show.ID = showId
+
+	replaceResult, err := showsCollection.ReplaceOne(ctx, bson.M{"_id": objId}, show)
+	if err != nil {
+		return err
+	} else if replaceResult.MatchedCount < 1 {
+		return errors.New("Error: pageId " + showId + " return 0 results")
+	}
+	return nil
 }

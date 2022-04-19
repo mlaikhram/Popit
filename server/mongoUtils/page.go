@@ -63,7 +63,11 @@ func GetPageByEpisode(client *mongo.Client, ctx context.Context, pageId string, 
 		return nil, err
 	}
 	page := pages[0]
-	log.Println("page: " + page.ID)
+	
+	if page.InitialEpisodeNum > episodeNum {
+		return nil, errors.New("error: Page not found")
+	}
+
 	pageNodesCollection := client.Database("popit").Collection("page_nodes")
 
 	cur, err := pageNodesCollection.Aggregate(ctx, bson.A{
